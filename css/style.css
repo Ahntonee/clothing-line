@@ -1,10 +1,10 @@
 /* =========================================
    FRANKO CLOTHING - Main Stylesheet
    Palette: Pure White + Gold/Champagne Accent
-   Fonts: Cormorant Garamond (display) + DM Sans (body)
+   Fonts: Bodoni Moda (display, fashion serif) + Jost (body, geometric sans)
    ========================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;0,6..96,800;1,6..96,400;1,6..96,500;1,6..96,600&family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
 
 /* CSS Variables */
 :root {
@@ -21,8 +21,8 @@
   --light-gray: #e8e8e8;
   --border: #ebebeb;
 
-  --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-body: 'DM Sans', sans-serif;
+  --font-display: 'Bodoni Moda', 'Didot', 'Times New Roman', Georgia, serif;
+  --font-body: 'Jost', 'Helvetica Neue', Arial, sans-serif;
 
   --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   --shadow-sm: 0 2px 12px rgba(0,0,0,0.06);
@@ -49,6 +49,23 @@ body {
   color: var(--dark);
   line-height: 1.7;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-synthesis: none;
+}
+
+/* ---- Display type: Bodoni Moda fashion serif ---- */
+h1, h2, h3, h4,
+.hero-title, .section-title, .about-hero-title,
+.story-title, .milestones-title, .founder-story-title {
+  font-optical-sizing: auto;
+  letter-spacing: -0.01em;
+  font-feature-settings: "lnum" 1, "kern" 1;
+}
+
+/* Body copy: keep Jost comfortably legible */
+p, li, .section-subtitle, .hero-desc {
+  letter-spacing: 0.005em;
 }
 
 img {
