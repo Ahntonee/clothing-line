@@ -71,9 +71,9 @@ Each placeholder shows the exact path it expects. For example:
 
 The number is stored in one place in `js/main.js`:
 ```js
-const WHATSAPP_NUMBER = '2347068935733';
+const WHATSAPP_NUMBER = '2408605101';
 ```
-Replace `2347068935733` with the client's full international number (no + sign, no spaces).
+Replace `2408605101` with the client's full international number (no + sign, no spaces).
 
 ## Updating Product Prices
 
