@@ -158,33 +158,202 @@ function buyNow(name, price) {
 }
 
 /* =========================================
-   SCROLL REVEAL
+   MOTION PREFERENCE
    ========================================= */
+const prefersReducedMotion = () =>
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* =========================================
+   SCROLL REVEAL
+   Idempotent — safe to call again after new
+   content is injected (shop / blog grids).
+   ========================================= */
+let _revealObserver = null;
+let _revealScrollBound = false;
+
+/* Reveal anything currently within (or above) the viewport. Acts as the
+   fallback path when IntersectionObserver is unavailable or never fires
+   (some embedded / headless webviews report a 0-height viewport). */
+function _revealSweep() {
+  const vh = window.innerHeight || document.documentElement.clientHeight || 900;
+  document.querySelectorAll('.reveal[data-reveal-bound]:not(.visible)').forEach(el => {
+    if (el.getBoundingClientRect().top < vh - 40) el.classList.add('visible');
+  });
+}
+
 function initScrollReveal() {
-  const reveals = document.querySelectorAll('.reveal');
+  const reveals = document.querySelectorAll('.reveal:not([data-reveal-bound])');
   if (!reveals.length) return;
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        /* Unobserve after reveal — fire once */
-        observer.unobserve(entry.target);
-      }
+  /* If the visitor prefers less motion, just show everything. */
+  if (prefersReducedMotion()) {
+    reveals.forEach(el => {
+      el.classList.add('visible');
+      el.setAttribute('data-reveal-bound', '');
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    return;
+  }
 
-  reveals.forEach(el => observer.observe(el));
+  if (!_revealObserver && 'IntersectionObserver' in window) {
+    _revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          _revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  }
+
+  reveals.forEach(el => {
+    el.setAttribute('data-reveal-bound', '');
+
+    /* Auto-stagger siblings that don't already carry an authored delay */
+    if (!el.style.transitionDelay) {
+      const sibs = el.parentElement
+        ? Array.from(el.parentElement.children).filter(c => c.classList.contains('reveal'))
+        : [];
+      const idx = sibs.indexOf(el);
+      if (idx > 0) {
+        el.style.setProperty('--reveal-delay', (Math.min(idx, 6) * 0.08).toFixed(2) + 's');
+      }
+    }
+
+    if (_revealObserver) _revealObserver.observe(el);
+  });
+
+  /* Fallback triggers — cover browsers/webviews where IntersectionObserver
+     is unavailable or never fires, plus bfcache restores. */
+  if (!_revealScrollBound) {
+    _revealScrollBound = true;
+    window.addEventListener('scroll', _revealSweep, { passive: true });
+    window.addEventListener('resize', _revealSweep);
+    window.addEventListener('load', _revealSweep);
+    window.addEventListener('pageshow', _revealSweep);
+  }
+  requestAnimationFrame(_revealSweep);
+  [150, 500, 1200].forEach(t => setTimeout(_revealSweep, t));
+
+  /* Last resort: never leave content invisible. */
+  setTimeout(() => {
+    document.querySelectorAll('.reveal[data-reveal-bound]:not(.visible)').forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.top < (window.innerHeight || 900) * 1.5) el.classList.add('visible');
+    });
+  }, 3500);
 }
 
 /* =========================================
    NAVIGATION SCROLL EFFECT
+   Condenses on scroll + hides on scroll-down,
+   reappears on scroll-up.
    ========================================= */
 function initNavScroll() {
   const navbar = document.querySelector('.navbar');
   if (!navbar) return;
+
+  let lastY = window.scrollY;
+  let ticking = false;
+
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const y = window.scrollY;
+      navbar.classList.toggle('scrolled', y > 40);
+
+      if (!prefersReducedMotion()) {
+        if (y > lastY && y > 320) {
+          navbar.classList.add('nav-hidden');
+        } else {
+          navbar.classList.remove('nav-hidden');
+        }
+      }
+      lastY = y;
+      ticking = false;
+    });
+  };
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+}
+
+/* =========================================
+   SCROLL PROGRESS BAR
+   ========================================= */
+function initScrollProgress() {
+  if (document.querySelector('.scroll-progress')) return;
+  const bar = document.createElement('div');
+  bar.className = 'scroll-progress';
+  document.body.appendChild(bar);
+
+  const update = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const ratio = max > 0 ? window.scrollY / max : 0;
+    bar.style.transform = `scaleX(${ratio.toFixed(4)})`;
+  };
+
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+}
+
+/* =========================================
+   BACK TO TOP
+   ========================================= */
+function initBackToTop() {
+  if (document.querySelector('.back-to-top')) return;
+  const btn = document.createElement('button');
+  btn.className = 'back-to-top';
+  btn.setAttribute('aria-label', 'Back to top');
+  btn.innerHTML = '<i class="bi bi-arrow-up"></i>';
+  btn.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: prefersReducedMotion() ? 'auto' : 'smooth'
+    });
+  });
+  document.body.appendChild(btn);
+
   window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 40);
+    btn.classList.toggle('visible', window.scrollY > 600);
+  }, { passive: true });
+}
+
+/* =========================================
+   PAGE TRANSITIONS
+   Soft fade-out before navigating to another
+   page on this site. Falls back safely.
+   ========================================= */
+function initPageTransitions() {
+  /* Clear the leaving state if the page is restored from bfcache */
+  window.addEventListener('pageshow', () => {
+    document.body.classList.remove('page-leaving');
+  });
+
+  if (prefersReducedMotion()) return;
+
+  document.addEventListener('click', (e) => {
+    if (e.defaultPrevented || e.button !== 0) return;
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+    const a = e.target.closest('a');
+    if (!a) return;
+
+    const href = a.getAttribute('href');
+    if (!href) return;
+    if (a.target === '_blank' || a.hasAttribute('download')) return;
+    if (href.startsWith('#') || href.startsWith('mailto:') ||
+        href.startsWith('tel:') || href.startsWith('javascript:')) return;
+    if (a.hasAttribute('onclick')) return;
+
+    let url;
+    try { url = new URL(a.href, location.href); } catch (_) { return; }
+    if (url.origin !== location.origin) return;
+    if (url.pathname === location.pathname) return;
+
+    e.preventDefault();
+    document.body.classList.add('page-leaving');
+    setTimeout(() => { window.location.href = a.href; }, 250);
   });
 }
 
@@ -257,4 +426,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCartOverlay();
   setActiveNav();
   updateCartUI();
+  initScrollProgress();
+  initBackToTop();
+  initPageTransitions();
 });

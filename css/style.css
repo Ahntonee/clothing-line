@@ -70,27 +70,42 @@ ul {
 /* =========================================
    SCROLL REVEAL ANIMATIONS
    ========================================= */
+:root {
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 .reveal {
   opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transform: translateY(34px);
+  filter: blur(6px);
+  transition: opacity 0.9s var(--ease-out-soft),
+              transform 0.9s var(--ease-out-soft),
+              filter 0.9s var(--ease-out-soft);
+  transition-delay: var(--reveal-delay, 0s);
+  will-change: opacity, transform;
 }
 
 .reveal.reveal-left {
-  transform: translateX(-50px);
+  transform: translateX(-48px);
 }
 
 .reveal.reveal-right {
-  transform: translateX(50px);
+  transform: translateX(48px);
 }
 
 .reveal.reveal-scale {
-  transform: scale(0.92);
+  transform: scale(0.94);
 }
 
 .reveal.visible {
   opacity: 1;
   transform: none;
+  filter: blur(0);
+}
+
+/* Drop will-change once settled */
+.reveal.visible {
+  will-change: auto;
 }
 
 /* Stagger delays for children */
@@ -891,5 +906,201 @@ ul {
 @media (max-width: 480px) {
   .cart-sidebar {
     width: 100vw;
+  }
+}
+
+/* =========================================
+   MOTION LAYER — site "feel" upgrade
+   ========================================= */
+
+/* ---- Page enter / exit transition ---- */
+body {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+body.page-leaving {
+  opacity: 0;
+  transition: opacity 0.26s ease;
+}
+
+/* ---- Scroll progress indicator ---- */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light));
+  z-index: 1200;
+  pointer-events: none;
+  transition: transform 0.1s linear;
+}
+
+/* ---- Navbar: hide on scroll-down, refine on scroll ---- */
+.navbar {
+  transition: transform 0.45s var(--ease-out-soft),
+              background 0.35s ease,
+              box-shadow 0.35s ease,
+              height 0.35s ease;
+}
+.navbar.nav-hidden {
+  transform: translateY(-100%);
+}
+.navbar.scrolled {
+  height: 64px;
+  background: rgba(0, 0, 0, 0.98);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.28);
+}
+.navbar.scrolled .nav-logo {
+  height: 60px;
+}
+
+/* Animated nav-link underline (builds on existing ::after) */
+.nav-links a::after {
+  transition: width 0.35s var(--ease-out-soft);
+}
+
+/* ---- Hero: slow Ken Burns on imagery ---- */
+@keyframes kenburns {
+  from { transform: scale(1); }
+  to   { transform: scale(1.09); }
+}
+.hero-image-col img,
+.about-hero-bg img {
+  animation: kenburns 22s ease-in-out infinite alternate;
+}
+
+/* Grow the hero eyebrow rule on load */
+@keyframes hairline-grow {
+  from { width: 0; opacity: 0; }
+  to   { width: 36px; opacity: 1; }
+}
+.hero-eyebrow::before {
+  animation: hairline-grow 1s var(--ease-out-soft) 0.5s both;
+}
+
+/* ---- Gold divider lines draw in on reveal ---- */
+.reveal .gold-line,
+.reveal .gold-line-sm {
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.9s var(--ease-out-soft) 0.2s;
+}
+.reveal .gold-line.centered {
+  transform-origin: center;
+}
+.reveal.visible .gold-line,
+.reveal.visible .gold-line-sm {
+  transform: scaleX(1);
+}
+
+/* ---- Card hover polish ---- */
+.product-card {
+  transition: transform 0.4s var(--ease-out-soft), box-shadow 0.4s var(--ease-out-soft);
+}
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+.product-image img {
+  transition: transform 0.7s var(--ease-out-soft), filter 0.7s ease;
+}
+.product-card:hover .product-image img {
+  transform: scale(1.06);
+  filter: saturate(1.06);
+}
+.category-card img {
+  transition: transform 0.8s var(--ease-out-soft);
+}
+.category-card:hover img {
+  transform: scale(1.05);
+}
+
+/* ---- Buttons: subtle lift + sheen ---- */
+.btn {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.35s var(--ease-out-soft),
+              background 0.35s ease,
+              color 0.35s ease,
+              box-shadow 0.35s ease;
+}
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.25) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.6s var(--ease-out-soft);
+  pointer-events: none;
+}
+.btn:hover::after {
+  transform: translateX(120%);
+}
+
+/* ---- Back-to-top control ---- */
+.back-to-top {
+  position: fixed;
+  right: 1.6rem;
+  bottom: 1.6rem;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--black);
+  color: var(--gold-light);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  opacity: 0;
+  transform: translateY(14px);
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s var(--ease-out-soft), background 0.3s ease;
+  z-index: 1100;
+}
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.back-to-top:hover {
+  background: var(--gold-dark);
+  color: var(--white);
+}
+
+/* ---- Respect reduced-motion preference ---- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal,
+  .reveal .gold-line,
+  .reveal .gold-line-sm {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  .hero-image-col img,
+  .about-hero-bg img {
+    animation: none !important;
+  }
+  .scroll-progress { display: none !important; }
+  body.page-leaving {
+    opacity: 1 !important;
   }
 }
