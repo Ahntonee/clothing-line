@@ -333,7 +333,7 @@
         <div class="img-upload-zone" id="pVideoZone" onclick="document.getElementById('pVideoFile').click()">
           <input type="file" id="pVideoFile" accept="video/*" onchange="onProductVideoSelected(event)" style="display:none;">
           <i class="bi bi-camera-video"></i>
-          <span id="pVideoZoneText">Click to upload a clip (MP4/WEBM/MOV, max ~100 MB)</span>
+          <span id="pVideoZoneText">Click to upload a clip (MP4/WEBM/MOV, max 50 MB)</span>
         </div>
         <div class="img-preview-box" id="pVideoPreviewBox" style="display:none;">
           <video id="pVideoPreview" src="" controls muted style="width:100%;max-height:200px;background:#000;"></video>
@@ -444,6 +444,7 @@
 const STRAPI       = 'https://franko-clothing-yetgp.ondigitalocean.app';
 const CAT_LABELS   = { suits:'Suits', shirts:'Shirts', shoes:'Shoes', accessories:'Accessories', african_attires:'African Attires' };
 const SPECIAL_BADGES = ['Signature','Handcrafted'];
+const MAX_VIDEO_MB   = 50;   // product video upload cap (matches backend)
 
 let TOKEN = localStorage.getItem('franko_admin_jwt') || '';
 let allProducts = [];
@@ -781,6 +782,16 @@ function clearProductImage() {
 function onProductVideoSelected(e) {
   const file = e.target.files[0];
   if (!file) return;
+
+  if (file.size > MAX_VIDEO_MB * 1024 * 1024) {
+    const sizeMb = (file.size / (1024 * 1024)).toFixed(1);
+    alert(`Cannot upload videos larger than ${MAX_VIDEO_MB} MB.\n\n"${file.name}" is ${sizeMb} MB. Compress the clip or paste a YouTube / Vimeo link instead.`);
+    showToast(`Video too large — ${MAX_VIDEO_MB} MB max`, true);
+    e.target.value = '';
+    clearProductVideo();
+    return;
+  }
+
   pendingProductVideoFile = file;
   document.getElementById('pVideoPreview').src            = URL.createObjectURL(file);
   document.getElementById('pVideoPreviewBox').style.display = 'block';
@@ -802,7 +813,7 @@ function clearProductVideo() {
   if (f) f.value = '';
   document.getElementById('pVideoPreviewBox').style.display = 'none';
   document.getElementById('pVideoPreview').removeAttribute('src');
-  document.getElementById('pVideoZoneText').textContent = 'Click to upload a clip (MP4/WEBM/MOV, max ~100 MB)';
+  document.getElementById('pVideoZoneText').textContent = 'Click to upload a clip (MP4/WEBM/MOV, max 50 MB)';
 }
 
 async function saveProduct() {

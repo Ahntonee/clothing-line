@@ -56,11 +56,11 @@ module.exports = ({ env }) => {
     {
       name: 'strapi::body',
       config: {
-        formLimit: '100mb',
+        formLimit: '50mb',
         jsonLimit: '10mb',
         textLimit: '10mb',
         formidable: {
-          maxFileSize: 100 * 1024 * 1024, // 100 MB — product video uploads
+          maxFileSize: 50 * 1024 * 1024, // 50 MB — product video uploads
         },
       },
     },
