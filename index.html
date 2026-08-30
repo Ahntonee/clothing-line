@@ -132,40 +132,66 @@
       background: var(--border);
     }
 
-    /* ---- MARQUEE STRIP ---- */
-    .marquee-strip {
+    /* ---- "GET CUSTOM FITTED" ROTATING STRIP ---- */
+    .fitted-strip {
       background: var(--black);
-      padding: 0.9rem 0;
+      padding: 1.15rem 0;
       overflow: hidden;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .fitted-strip-inner {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      padding: 0 1.5rem;
+      text-align: center;
+    }
+
+    .fitted-label {
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .fitted-rotator {
+      display: inline-flex;
+      align-items: baseline;
+    }
+
+    .fitted-word {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.2rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      color: var(--gold-light);
       white-space: nowrap;
     }
 
-    .marquee-inner {
-      display: inline-flex;
-      animation: marquee 22s linear infinite;
-      gap: 0;
+    .fitted-caret {
+      display: inline-block;
+      width: 1px;
+      height: 1em;
+      margin-left: 3px;
+      background: var(--gold);
+      transform: translateY(2px);
+      animation: fitted-blink 1s steps(1) infinite;
     }
 
-    .marquee-item {
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.7);
-      padding: 0 2.5rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 1rem;
+    @keyframes fitted-blink {
+      0%, 50%   { opacity: 1; }
+      50.01%, 100% { opacity: 0; }
     }
 
-    .marquee-item i {
-      color: var(--gold);
-      font-size: 0.6rem;
-    }
-
-    @keyframes marquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+    @media (max-width: 480px) {
+      .fitted-strip-inner { flex-direction: column; gap: 0.3rem; }
     }
 
     /* ---- CATEGORIES SECTION ---- */
@@ -523,25 +549,15 @@
   </div>
 </section>
 
-<!-- ===================== MARQUEE STRIP ===================== -->
-<div class="marquee-strip">
-  <div class="marquee-inner">
-    <!-- First set -->
-    <!-- <span class="marquee-item">Premium Suits <i class="bi bi-diamond-fill"></i></span>
-    <span class="marquee-item">Luxury Shirts <i class="bi bi-diamond-fill"></i></span>
-    <span class="marquee-item">Fine Shoes <i class="bi bi-diamond-fill"></i></span>
-    <span class="marquee-item">Exclusive Accessories <i class="bi bi-diamond-fill"></i></span>
-    <span class="marquee-item">Walking Sticks & Staffs <i class="bi bi-diamond-fill"></i></span>
-    <span class="marquee-item">New Arrivals 2025 <i class="bi bi-diamond-fill"></i></span>
-    <span class="marquee-item">DMV's Finest <i class="bi bi-diamond-fill"></i></span> -->
-    <!-- Duplicate for seamless loop -->
-    <!-- <span class="marquee-item">Premium Suits <i class="bi bi-diamond-fill"></i></span>
-    <span class="marquee-item">Luxury Shirts <i class="bi bi-diamond-fill"></i></span>
-    <span class="marquee-item">Fine Shoes <i class="bi bi-diamond-fill"></i></span>
-    <span class="marquee-item">Exclusive Accessories <i class="bi bi-diamond-fill"></i></span>
-    <span class="marquee-item">Walking Sticks & Staffs <i class="bi bi-diamond-fill"></i></span>
-    <span class="marquee-item">New Arrivals 2025 <i class="bi bi-diamond-fill"></i></span>
-    <span class="marquee-item">DMV's Finest <i class="bi bi-diamond-fill"></i></span> -->
+<!-- ===================== "GET CUSTOM FITTED" ROTATING STRIP ===================== -->
+<div class="fitted-strip">
+  <div class="fitted-strip-inner">
+    <span class="fitted-label">Get Custom Fitted</span>
+    <span class="fitted-rotator" id="fittedRotator"
+          data-words="Suits,Tuxedos,Shirts,Kaftans,African Attires"
+          aria-live="polite">
+      <span class="fitted-word">Suits</span><span class="fitted-caret" aria-hidden="true"></span>
+    </span>
   </div>
 </div>
 

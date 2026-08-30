@@ -278,6 +278,64 @@ function initNavScroll() {
 }
 
 /* =========================================
+   "GET CUSTOM FITTED" — TYPEWRITER ROTATOR
+   Types each word, holds, deletes, moves to the
+   next, and loops forever.
+   ========================================= */
+function initFittedRotator() {
+  const rotator = document.getElementById('fittedRotator');
+  if (!rotator) return;
+
+  const wordEl = rotator.querySelector('.fitted-word');
+  const caret = rotator.querySelector('.fitted-caret');
+  const words = (rotator.dataset.words || '')
+    .split(',').map(w => w.trim()).filter(Boolean);
+  if (!wordEl || words.length < 2) return;
+
+  /* Reduced motion: show the options as a static list, no animation. */
+  if (prefersReducedMotion()) {
+    wordEl.textContent = words.join('  ·  ');
+    if (caret) caret.remove();
+    return;
+  }
+
+  const HOLD = 1600;      // pause on a fully-typed word
+  const BETWEEN = 350;    // pause between words
+  const TYPE = 95;        // per-character typing speed
+  const ERASE = 45;       // per-character erasing speed
+
+  let wi = 0;                    // current word index
+  let ci = words[0].length;      // characters currently shown
+  let deleting = false;
+
+  const tick = () => {
+    const current = words[wi];
+
+    if (!deleting) {
+      ci++;
+      if (ci >= current.length) {
+        wordEl.textContent = current;
+        deleting = true;
+        return setTimeout(tick, HOLD);
+      }
+    } else {
+      ci--;
+      if (ci <= 0) {
+        deleting = false;
+        wi = (wi + 1) % words.length;
+        wordEl.textContent = '';
+        return setTimeout(tick, BETWEEN);
+      }
+    }
+
+    wordEl.textContent = current.slice(0, Math.max(ci, 0));
+    setTimeout(tick, deleting ? ERASE : TYPE);
+  };
+
+  setTimeout(tick, HOLD);
+}
+
+/* =========================================
    SCROLL PROGRESS BAR
    ========================================= */
 function initScrollProgress() {
@@ -429,4 +487,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollProgress();
   initBackToTop();
   initPageTransitions();
+  initFittedRotator();
 });
