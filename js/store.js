@@ -204,11 +204,23 @@ function buildProductCard(product, prefix) {
   const catLabel  = CATEGORY_LABELS[product.category] || product.category;
   const nameEsc   = product.name.replace(/'/g, "\\'");
 
+  /* Optional product video (uploaded file or YouTube/Vimeo embed) */
+  const hasVideo   = !!product.video;
+  const videoAttr  = hasVideo
+    ? ` data-video="${String(product.video).replace(/"/g, '&quot;')}" data-video-type="${product.videoType || 'file'}"`
+    : '';
+  const videoBtn = hasVideo
+    ? `<button class="product-video-btn" type="button" onclick="openProductVideo(this)" aria-label="Watch video for ${product.name.replace(/"/g, '&quot;')}">
+        <i class="bi bi-play-fill"></i>
+      </button>`
+    : '';
+
   return `
-<div class="product-card reveal" data-category="${product.category}" data-price="${product.price}" data-name="${product.name}" data-id="${product.id}">
+<div class="product-card reveal" data-category="${product.category}" data-price="${product.price}" data-name="${product.name}" data-id="${product.id}"${videoAttr}>
   <div class="product-image">
     <img src="${imgSrc}" alt="${product.name}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
     ${badgeHtml}
+    ${videoBtn}
     <div class="product-actions-overlay">
       <button class="btn btn-primary" onclick="addToCart('${nameEsc}', ${product.price}, '${catLabel}', '')">
         <i class="bi bi-bag-plus"></i> Add to Cart

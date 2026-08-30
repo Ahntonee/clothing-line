@@ -42,6 +42,15 @@
       "required": true,
       "allowedTypes": ["images"]
     },
+    "video": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["videos", "files"]
+    },
+    "videoUrl": {
+      "type": "string"
+    },
     "featured": {
       "type": "boolean",
       "default": false

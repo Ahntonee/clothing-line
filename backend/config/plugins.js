@@ -18,6 +18,9 @@ module.exports = ({ env }) => ({
           },
         },
       },
+      /* Allow larger files (product videos). ~100 MB —
+         keep clips short/compressed; use a YouTube/Vimeo link for anything bigger. */
+      sizeLimit: 100 * 1024 * 1024,
       actionOptions: {
         upload:       {},
         uploadStream: {},

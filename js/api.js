@@ -12,6 +12,28 @@ const FrankoAPI = (() => {
     return (window.STRAPI_URL || '').replace(/\/$/, '');
   }
 
+  /* ── Normalise a product video from an upload URL and/or a pasted link ──
+     Returns { videoType: 'file' | 'youtube' | 'vimeo' | '', video: <src> }
+     - file   → direct URL for a <video> element (uploaded MP4 or direct link)
+     - youtube/vimeo → an embeddable player URL for an <iframe>            */
+  function parseVideo(uploadUrl, linkUrl) {
+    if (uploadUrl) return { videoType: 'file', video: uploadUrl };
+
+    const link = (linkUrl || '').trim();
+    if (!link) return { videoType: '', video: '' };
+
+    const yt = link.match(
+      /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/
+    );
+    if (yt) return { videoType: 'youtube', video: `https://www.youtube.com/embed/${yt[1]}` };
+
+    const vm = link.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+    if (vm) return { videoType: 'vimeo', video: `https://player.vimeo.com/video/${vm[1]}` };
+
+    /* Fall back to treating it as a direct video file URL */
+    return { videoType: 'file', video: link };
+  }
+
   /* ── Strapi response → flat product object ── */
   function toProduct(item) {
     const a   = item.attributes;
@@ -20,6 +42,9 @@ const FrankoAPI = (() => {
     const url = img
       ? (img.formats?.medium?.url ?? img.formats?.small?.url ?? img.url ?? '')
       : '';
+
+    const vid = a.video?.data?.attributes ?? null;
+    const { videoType, video } = parseVideo(vid?.url ?? '', a.videoUrl ?? '');
 
     return {
       id:          String(item.id),
@@ -30,6 +55,8 @@ const FrankoAPI = (() => {
       featured:    Boolean(a.featured),
       image:       url,
       description: a.description ?? '',
+      video,
+      videoType,
     };
   }
 
@@ -75,7 +102,7 @@ const FrankoAPI = (() => {
     try {
       const json = await apiFetch(
         '/api/products' +
-        '?populate=image' +
+        '?populate=*' +
         '&pagination[pageSize]=200' +
         '&sort=createdAt:asc' +
         '&publicationState=live'

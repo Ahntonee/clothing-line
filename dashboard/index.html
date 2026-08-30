@@ -327,6 +327,28 @@
           <button class="img-remove" onclick="clearProductImage()" title="Remove image"><i class="bi bi-x"></i></button>
         </div>
       </div>
+
+      <div class="form-group">
+        <label class="form-label">Product Video <span style="font-weight:400;color:var(--mid);">(optional)</span></label>
+        <div class="img-upload-zone" id="pVideoZone" onclick="document.getElementById('pVideoFile').click()">
+          <input type="file" id="pVideoFile" accept="video/*" onchange="onProductVideoSelected(event)" style="display:none;">
+          <i class="bi bi-camera-video"></i>
+          <span id="pVideoZoneText">Click to upload a clip (MP4/WEBM/MOV, max ~100 MB)</span>
+        </div>
+        <div class="img-preview-box" id="pVideoPreviewBox" style="display:none;">
+          <video id="pVideoPreview" src="" controls muted style="width:100%;max-height:200px;background:#000;"></video>
+          <button class="img-remove" onclick="clearProductVideo()" title="Remove video"><i class="bi bi-x"></i></button>
+        </div>
+        <div style="margin-top:.6rem;">
+          <label class="form-label" style="font-size:.7rem;">…or paste a YouTube / Vimeo link</label>
+          <input class="form-control-admin" id="pVideoUrl" type="url" placeholder="https://www.youtube.com/watch?v=…"
+                 oninput="onProductVideoUrlInput()">
+          <p style="font-size:.68rem;color:var(--mid);margin-top:.3rem;">
+            An uploaded file takes priority over a link. Use a link for longer videos to save storage.
+          </p>
+        </div>
+      </div>
+
       <div class="form-group">
         <label class="form-label">Description</label>
         <textarea class="form-control-admin" id="pDescription" rows="3" placeholder="Short product description…"></textarea>
@@ -426,10 +448,12 @@ const SPECIAL_BADGES = ['Signature','Handcrafted'];
 let TOKEN = localStorage.getItem('franko_admin_jwt') || '';
 let allProducts = [];
 let allPosts    = [];
-let pendingProductFile    = null;
-let pendingBlogFile       = null;
-let currentProductImageId = null;
-let currentBlogImageId    = null;
+let pendingProductFile      = null;
+let pendingProductVideoFile  = null;
+let pendingBlogFile         = null;
+let currentProductImageId   = null;
+let currentProductVideoId    = null;
+let currentBlogImageId      = null;
 
 /* =============================================
    AUTH  — Strapi Admin JWT
@@ -661,7 +685,7 @@ function renderProductTable() {
     return `
 <tr>
   <td><img class="table-img" src="${imgUrl(p.image)}" alt="${p.name}" onerror="this.style.visibility='hidden'"></td>
-  <td style="font-weight:500;max-width:180px;">${p.name}</td>
+  <td style="font-weight:500;max-width:180px;">${p.name}${(p.video || p.videoUrl) ? ' <i class="bi bi-camera-video-fill" title="Has video" style="color:var(--gold-dark);font-size:.75rem;"></i>' : ''}</td>
   <td>${CAT_LABELS[p.category] || p.category}</td>
   <td style="font-weight:600;color:var(--gold-dark);">$${Number(p.price).toLocaleString()}</td>
   <td>${badgeHtml}</td>
@@ -679,8 +703,10 @@ function renderProductTable() {
    PRODUCT MODAL
    ============================================= */
 function openProductModal(id) {
-  pendingProductFile     = null;
-  currentProductImageId  = null;
+  pendingProductFile      = null;
+  pendingProductVideoFile = null;
+  currentProductImageId   = null;
+  currentProductVideoId   = null;
   const modal = document.getElementById('productModal');
 
   if (id) {
@@ -704,6 +730,16 @@ function openProductModal(id) {
     } else {
       clearProductImage();
     }
+
+    clearProductVideo();
+    const vidData = p.video?.data || p.video;
+    if (vidData) {
+      currentProductVideoId = vidData.id || vidData;
+      document.getElementById('pVideoPreview').src            = imgUrl(p.video);
+      document.getElementById('pVideoPreviewBox').style.display = 'block';
+      document.getElementById('pVideoZoneText').textContent   = 'Click to replace video';
+    }
+    document.getElementById('pVideoUrl').value = p.videoUrl || '';
   } else {
     document.getElementById('productModalTitle').textContent = 'Add Product';
     document.getElementById('editProductId').value = '';
@@ -714,6 +750,8 @@ function openProductModal(id) {
     document.getElementById('pDescription').value = '';
     document.getElementById('pFeatured').checked = false;
     clearProductImage();
+    clearProductVideo();
+    document.getElementById('pVideoUrl').value = '';
   }
   modal.classList.add('open');
 }
@@ -740,6 +778,33 @@ function clearProductImage() {
   document.getElementById('pImageZoneText').textContent = 'Click to upload image (JPG, PNG, WEBP)';
 }
 
+function onProductVideoSelected(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  pendingProductVideoFile = file;
+  document.getElementById('pVideoPreview').src            = URL.createObjectURL(file);
+  document.getElementById('pVideoPreviewBox').style.display = 'block';
+  document.getElementById('pVideoZoneText').textContent   = file.name;
+  document.getElementById('pVideoUrl').value = '';   /* uploaded file wins */
+}
+
+function onProductVideoUrlInput() {
+  if (document.getElementById('pVideoUrl').value.trim()) {
+    /* A link was entered — drop any pending upload to avoid ambiguity */
+    if (pendingProductVideoFile) clearProductVideo();
+  }
+}
+
+function clearProductVideo() {
+  pendingProductVideoFile = null;
+  currentProductVideoId   = null;
+  const f = document.getElementById('pVideoFile');
+  if (f) f.value = '';
+  document.getElementById('pVideoPreviewBox').style.display = 'none';
+  document.getElementById('pVideoPreview').removeAttribute('src');
+  document.getElementById('pVideoZoneText').textContent = 'Click to upload a clip (MP4/WEBM/MOV, max ~100 MB)';
+}
+
 async function saveProduct() {
   const name  = document.getElementById('pName').value.trim();
   const price = parseFloat(document.getElementById('pPrice').value);
@@ -759,6 +824,13 @@ async function saveProduct() {
       imageId = uploaded.id;
     }
 
+    let videoId = currentProductVideoId;
+    if (pendingProductVideoFile) {
+      showToast('Uploading video… this can take a moment');
+      const uploadedVid = await uploadFile(pendingProductVideoFile);
+      videoId = uploadedVid.id;
+    }
+
     const payload = {
       name,
       price,
@@ -766,6 +838,8 @@ async function saveProduct() {
       badge:       document.getElementById('pBadge').value || null,
       description: document.getElementById('pDescription').value.trim() || null,
       featured:    document.getElementById('pFeatured').checked,
+      video:       videoId || null,
+      videoUrl:    document.getElementById('pVideoUrl').value.trim() || null,
     };
     if (imageId) payload.image = imageId;
 

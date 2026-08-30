@@ -1008,7 +1008,8 @@
     }
 
     grid.innerHTML = products.map(p => buildProductCard(p)).join('');
-    attachLightbox();
+    /* Lightbox (images + videos) is handled globally in main.js via event
+       delegation, so dynamically-rendered cards need no re-binding. */
     if (typeof initScrollReveal === 'function') initScrollReveal();
     if (typeof initFilterTabs  === 'function') initFilterTabs();
     updateResultCount();
@@ -1018,18 +1019,6 @@
   window.addEventListener('storage', e => {
     if (e.key === 'franko_products') renderShopProducts();
   });
-
-  /* Lightbox wiring — re-attached after each dynamic render */
-  function attachLightbox() {
-    document.querySelectorAll('.product-image img').forEach(img => {
-      img.style.cursor = 'zoom-in';
-      img.addEventListener('click', () => {
-        document.getElementById('lightboxImg').src = img.src;
-        document.getElementById('lightbox').style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-      });
-    });
-  }
 
   /* On load: render products then honour ?cat= URL param */
   document.addEventListener('DOMContentLoaded', async () => {
@@ -1071,46 +1060,6 @@
   });
 
 </script>
-<!-- Lightbox -->
-<div id="lightbox" style="
-  display:none; position:fixed; inset:0; z-index:9999;
-  background:rgba(0,0,0,0.92); align-items:center;
-  justify-content:center; cursor:zoom-out;">
-  <img id="lightboxImg" src="" alt="" style="
-    max-width:90vw; max-height:90vh;
-    object-fit:contain; box-shadow:0 0 60px rgba(0,0,0,0.5);">
-  <button onclick="closeLightbox()" style="
-    position:fixed; top:1.5rem; right:2rem;
-    background:none; border:none; color:#fff;
-    font-size:2rem; cursor:pointer; line-height:1;">&#x2715;</button>
-</div>
-
-<script>
-  // Open lightbox on product image click
-  document.querySelectorAll('.product-image img').forEach(img => {
-    img.style.cursor = 'zoom-in';
-    img.addEventListener('click', () => {
-      const lb = document.getElementById('lightbox');
-      document.getElementById('lightboxImg').src = img.src;
-      lb.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-    });
-  });
-
-  function closeLightbox() {
-    document.getElementById('lightbox').style.display = 'none';
-    document.body.style.overflow = '';
-  }
-
-  // Close on overlay click
-  document.getElementById('lightbox').addEventListener('click', function(e) {
-    if (e.target === this) closeLightbox();
-  });
-
-  // Close on Escape key
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeLightbox();
-  });
-</script>
+<!-- Media lightbox (product images + videos) is created and wired by js/main.js -->
 </body>
 </html>

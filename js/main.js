@@ -378,6 +378,92 @@ function initBackToTop() {
 }
 
 /* =========================================
+   MEDIA LIGHTBOX  (product images + videos)
+   Works on any page — uses event delegation so
+   dynamically-rendered product cards need no
+   re-binding.
+   ========================================= */
+function initMediaLightbox() {
+  let box = document.getElementById('lightbox');
+
+  if (!box) {
+    box = document.createElement('div');
+    box.id = 'lightbox';
+    box.className = 'media-lightbox';
+    box.innerHTML =
+      '<div id="lightboxMedia" class="media-lightbox-inner"></div>' +
+      '<button type="button" class="media-lightbox-close" aria-label="Close">&#x2715;</button>';
+    document.body.appendChild(box);
+  }
+  const inner = box.querySelector('#lightboxMedia');
+
+  window.closeLightbox = function () {
+    box.classList.remove('open');
+    inner.innerHTML = '';           /* removing the node stops playback */
+    document.body.style.overflow = '';
+  };
+
+  function open() {
+    box.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  window.openLightboxImage = function (src) {
+    if (!src) return;
+    inner.innerHTML = '';
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = '';
+    inner.appendChild(img);
+    open();
+  };
+
+  window.openProductVideo = function (trigger) {
+    const card = trigger && trigger.closest ? trigger.closest('.product-card') : null;
+    const src  = card ? card.dataset.video : (trigger && trigger.src);
+    const type = card ? (card.dataset.videoType || 'file') : 'file';
+    if (!src) return;
+    inner.innerHTML = '';
+
+    if (type === 'youtube' || type === 'vimeo') {
+      const frame = document.createElement('div');
+      frame.className = 'media-lightbox-video';
+      const iframe = document.createElement('iframe');
+      iframe.src = src + (src.indexOf('?') > -1 ? '&' : '?') + 'autoplay=1';
+      iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+      iframe.setAttribute('allowfullscreen', '');
+      frame.appendChild(iframe);
+      inner.appendChild(frame);
+    } else {
+      const video = document.createElement('video');
+      video.src = src;
+      video.controls = true;
+      video.autoplay = true;
+      video.playsInline = true;
+      inner.appendChild(video);
+    }
+    open();
+  };
+
+  /* Close interactions */
+  box.addEventListener('click', (e) => { if (e.target === box) window.closeLightbox(); });
+  box.querySelector('.media-lightbox-close')
+     .addEventListener('click', window.closeLightbox);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && box.classList.contains('open')) window.closeLightbox();
+  });
+
+  /* Delegated triggers — survive dynamic re-renders */
+  document.addEventListener('click', (e) => {
+    const playBtn = e.target.closest('.product-video-btn');
+    if (playBtn) { e.preventDefault(); window.openProductVideo(playBtn); return; }
+
+    const pImg = e.target.closest('.product-image img');
+    if (pImg) { window.openLightboxImage(pImg.currentSrc || pImg.src); }
+  });
+}
+
+/* =========================================
    PAGE TRANSITIONS
    Soft fade-out before navigating to another
    page on this site. Falls back safely.
@@ -488,4 +574,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initBackToTop();
   initPageTransitions();
   initFittedRotator();
+  initMediaLightbox();
 });
