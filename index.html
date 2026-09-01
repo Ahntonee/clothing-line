@@ -143,31 +143,26 @@
     }
 
     /* ---- "GET CUSTOM FITTED" ROTATING STRIP ---- */
-    .fitted-strip {
-      background: var(--black);
-      padding: 1.15rem 0;
-      overflow: hidden;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .fitted-strip-inner {
+    /* ---- "Get Custom Fitted" rotator — sits in the hero, above the buttons ---- */
+    .hero-fitted {
       display: flex;
       align-items: baseline;
-      justify-content: center;
-      gap: 0.75rem;
+      gap: 0.7rem;
       flex-wrap: wrap;
-      padding: 0 1.5rem;
-      text-align: center;
+      max-width: 420px;
+      margin: 0.4rem 0 2.4rem;
+      padding-top: 1.4rem;
+      border-top: 1px solid rgba(201, 162, 76, 0.28);
     }
 
     .fitted-label {
       font-family: var(--font-body);
       font-size: 0.72rem;
       font-weight: 600;
-      letter-spacing: 0.28em;
+      letter-spacing: 0.26em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.6);
+      color: var(--mid);
+      white-space: nowrap;
     }
 
     .fitted-rotator {
@@ -178,27 +173,27 @@
     .fitted-word {
       font-family: var(--font-display);
       font-style: italic;
-      font-size: 1.2rem;
+      font-size: 1.35rem;
       font-weight: 500;
       letter-spacing: 0.01em;
       white-space: nowrap;
-      /* Metallic gold-foil fill + shimmer (matches the logo) */
-      background: var(--grad-foil-sheen);
+      /* Metallic gold-foil fill + shimmer (readable on the light hero) */
+      background: var(--grad-foil-sheen-onlight);
       background-size: 300% 100%;
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      color: var(--gold-light);
-      animation: foil-sweep 7s linear infinite;
+      color: var(--gold-dark);
+      animation: foil-sweep 9s linear infinite;
     }
 
     .fitted-caret {
       display: inline-block;
-      width: 1px;
-      height: 1em;
-      margin-left: 3px;
-      background: var(--gold);
-      transform: translateY(2px);
+      width: 2px;
+      height: 1.05em;
+      margin-left: 2px;
+      background: var(--gold-dark);
+      transform: translateY(3px);
       animation: fitted-blink 1s steps(1) infinite;
     }
 
@@ -207,8 +202,8 @@
       50.01%, 100% { opacity: 0; }
     }
 
-    @media (max-width: 480px) {
-      .fitted-strip-inner { flex-direction: column; gap: 0.3rem; }
+    @media (max-width: 768px) {
+      .hero-fitted { max-width: none; justify-content: center; }
     }
 
     /* ---- CATEGORIES SECTION ---- */
@@ -532,7 +527,16 @@
       Suits, shirts, shoes and accessories — refined for the modern gentleman.
     </p>
 
-    <div class="hero-actions reveal" style="transition-delay:0.3s;">
+    <div class="hero-fitted reveal" style="transition-delay:0.3s;">
+      <span class="fitted-label">Get Custom Fitted</span>
+      <span class="fitted-rotator" id="fittedRotator"
+            data-words="Suits,Tuxedos,Shirts,Kaftans,African Attires"
+            aria-live="polite">
+        <span class="fitted-word">Suits</span><span class="fitted-caret" aria-hidden="true"></span>
+      </span>
+    </div>
+
+    <div class="hero-actions reveal" style="transition-delay:0.4s;">
       <a href="pages/shop.html" class="btn btn-primary">
         <i class="bi bi-grid-3x3-gap"></i> Explore Collection
       </a>
@@ -565,18 +569,6 @@
     <img src="images/hero/hero-main.jpg" alt="Hero Model" loading="lazy" style="width:100%;height:100%;object-fit:cover; object-position: bottom;">
   </div>
 </section>
-
-<!-- ===================== "GET CUSTOM FITTED" ROTATING STRIP ===================== -->
-<div class="fitted-strip">
-  <div class="fitted-strip-inner">
-    <span class="fitted-label">Get Custom Fitted</span>
-    <span class="fitted-rotator" id="fittedRotator"
-          data-words="Suits,Tuxedos,Shirts,Kaftans,African Attires"
-          aria-live="polite">
-      <span class="fitted-word">Suits</span><span class="fitted-caret" aria-hidden="true"></span>
-    </span>
-  </div>
-</div>
 
 <!-- ===================== SECTION 2: CATEGORIES ===================== -->
 <section class="categories-section">
