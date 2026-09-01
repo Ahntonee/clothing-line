@@ -97,13 +97,89 @@
     .hero-image-col {
       position: relative;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.1rem;
+      padding: 3.5rem 3.25rem 3.5rem 1.25rem;
     }
 
-    .hero-image-col .img-placeholder {
+    /* ---- Hero product carousel ---- */
+    .hero-carousel-wrap { width: 100%; max-width: 430px; }
+
+    .hero-carousel {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 5;          /* framed portrait — much shorter than the old full-bleed image */
+      overflow: hidden;
+      background: var(--cream);
+      border: 1px solid rgba(201, 162, 76, 0.35);
+      box-shadow: 0 30px 70px rgba(20, 16, 11, 0.28);
+    }
+
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      display: block;
+      opacity: 0;
+      transition: opacity 0.9s ease;
+      text-decoration: none;
+      color: #fff;
+    }
+    .hero-slide.is-active { opacity: 1; }
+
+    .hero-slide img {
+      width: 100%;
       height: 100%;
-      min-height: 100vh;
-      flex-direction: column;
-      gap: 0.8rem;
+      object-fit: cover;
+      display: block;
+      animation: none;
+    }
+    .hero-slide.is-active img { animation: kenburns 14s ease-out alternate infinite; }
+
+    .hero-slide-caption {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.6rem;
+      padding: 2.6rem 1.2rem 1rem;
+      background: linear-gradient(to top, rgba(15, 11, 7, 0.9) 0%, rgba(15, 11, 7, 0) 100%);
+    }
+    .hero-slide-name {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+    .hero-slide-price {
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--gold-light);
+      white-space: nowrap;
+    }
+
+    .hero-carousel-dots {
+      display: flex;
+      gap: 0.4rem;
+      justify-content: center;
+    }
+    .hero-dot {
+      width: 7px; height: 7px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: rgba(20, 16, 11, 0.22);
+      cursor: pointer;
+      transition: width 0.3s ease, background 0.3s ease, border-radius 0.3s ease;
+    }
+    .hero-dot.is-active {
+      width: 20px;
+      border-radius: 4px;
+      background: var(--gold-dark);
     }
 
     /* Decorative geometric accent */
@@ -564,9 +640,17 @@
     </div> -->
   </div>
 
-  <!-- Right: Hero Image -->
+  <!-- Right: Product carousel (falls back to a single image until products load) -->
   <div class="hero-image-col">
-    <img src="images/hero/hero-main.jpg" alt="Hero Model" loading="lazy" style="width:100%;height:100%;object-fit:cover; object-position: bottom;">
+    <div class="hero-carousel-wrap" id="heroCarouselWrap">
+      <div class="hero-carousel" id="heroCarousel">
+        <div class="hero-slide is-active">
+          <img src="images/hero/hero-main.jpg" alt="FRANKO Clothing" loading="eager"
+               style="object-position:bottom;">
+        </div>
+      </div>
+      <div class="hero-carousel-dots" id="heroCarouselDots" role="tablist" aria-label="Featured products"></div>
+    </div>
   </div>
 </section>
 
@@ -865,10 +949,69 @@
     if (typeof initScrollReveal === 'function') initScrollReveal();
   }
 
-  document.addEventListener('DOMContentLoaded', renderFeaturedProducts);
+  /* ---- Hero product carousel (4 published products) ---- */
+  let _heroCarTimer = null;
+
+  async function renderHeroCarousel() {
+    const track = document.getElementById('heroCarousel');
+    const dotsWrap = document.getElementById('heroCarouselDots');
+    if (!track || !dotsWrap) return;
+
+    const all = await FrankoAPI.getProducts();
+    if (!all.length) return;                 /* keep the fallback image */
+
+    const featured = all.filter(p => p.featured);
+    const pool = featured.length >= 4 ? featured : [...featured, ...all.filter(p => !p.featured)];
+    const picks = pool.slice(0, 4);
+    if (!picks.length) return;
+
+    const srcFor = p => /^https?:\/\//i.test(p.image) ? p.image : (window.IMG_PREFIX || '') + p.image;
+
+    track.innerHTML = picks.map((p, i) => `
+      <a class="hero-slide${i === 0 ? ' is-active' : ''}"
+         href="pages/shop.html?cat=${encodeURIComponent(p.category || '')}">
+        <img src="${srcFor(p)}" alt="${p.name.replace(/"/g, '&quot;')}" loading="${i === 0 ? 'eager' : 'lazy'}">
+        <span class="hero-slide-caption">
+          <span class="hero-slide-name">${p.name}</span>
+          <span class="hero-slide-price">$${Number(p.price).toLocaleString()}</span>
+        </span>
+      </a>`).join('');
+
+    dotsWrap.innerHTML = picks.map((_, i) =>
+      `<button class="hero-dot${i === 0 ? ' is-active' : ''}" type="button" aria-label="Show product ${i + 1}"></button>`
+    ).join('');
+
+    const slides = [...track.querySelectorAll('.hero-slide')];
+    const dots = [...dotsWrap.querySelectorAll('.hero-dot')];
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let idx = 0;
+
+    function go(n) {
+      idx = (n + slides.length) % slides.length;
+      slides.forEach((s, i) => s.classList.toggle('is-active', i === idx));
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+    }
+    function start() {
+      stop();
+      if (reduce || slides.length < 2) return;
+      _heroCarTimer = setInterval(() => go(idx + 1), 4500);
+    }
+    function stop() { if (_heroCarTimer) clearInterval(_heroCarTimer); _heroCarTimer = null; }
+
+    dots.forEach((d, i) => d.addEventListener('click', () => { go(i); start(); }));
+    const wrap = document.getElementById('heroCarouselWrap');
+    wrap.addEventListener('mouseenter', stop);
+    wrap.addEventListener('mouseleave', start);
+    start();
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderFeaturedProducts();
+    renderHeroCarousel();
+  });
   /* Live update when admin changes products in another tab (localStorage fallback) */
   window.addEventListener('storage', e => {
-    if (e.key === 'franko_products') renderFeaturedProducts();
+    if (e.key === 'franko_products') { renderFeaturedProducts(); renderHeroCarousel(); }
   });
 </script>
 </body>
