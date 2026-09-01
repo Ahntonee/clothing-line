@@ -21,7 +21,9 @@
     /* ---- HERO SECTION ---- */
     .hero {
       min-height: 100vh;
-      background: var(--off-white);
+      background:
+        radial-gradient(80% 60% at 78% 12%, rgba(201,162,76,0.12) 0%, rgba(201,162,76,0) 60%),
+        linear-gradient(180deg, #fdfbf6 0%, var(--off-white) 100%);
       display: grid;
       grid-template-columns: 1fr 1fr;
       padding-top: 72px;
@@ -59,15 +61,23 @@
     .hero-title {
       font-family: var(--font-display);
       font-size: clamp(3rem, 5.5vw, 5.2rem);
-      font-weight: 300;
+      font-weight: 400;
       line-height: 1.05;
-      color: var(--black);
       margin-bottom: 1.8rem;
+      /* Metallic gold sampled from the logo, with a slow light-on-foil sweep */
+      background: var(--grad-foil-sheen-onlight);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: var(--gold-dark);
+      animation: foil-sweep 11s linear infinite;
     }
 
     .hero-title em {
       font-style: italic;
-      color: var(--gold-dark);
+      -webkit-text-fill-color: var(--gold-deep);
+      color: var(--gold-deep);
     }
 
     .hero-desc {
@@ -171,8 +181,15 @@
       font-size: 1.2rem;
       font-weight: 500;
       letter-spacing: 0.01em;
-      color: var(--gold-light);
       white-space: nowrap;
+      /* Metallic gold-foil fill + shimmer (matches the logo) */
+      background: var(--grad-foil-sheen);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: var(--gold-light);
+      animation: foil-sweep 7s linear infinite;
     }
 
     .fitted-caret {
