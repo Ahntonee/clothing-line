@@ -300,70 +300,6 @@
       background: var(--border);
     }
 
-    /* ---- "GET CUSTOM FITTED" ROTATING STRIP ---- */
-    /* ---- "Get Custom Fitted" rotator — sits in the hero, above the buttons ---- */
-    .hero-fitted {
-      display: flex;
-      align-items: baseline;
-      gap: 0.7rem;
-      flex-wrap: wrap;
-      max-width: 420px;
-      margin: 0.4rem 0 2.4rem;
-      padding-top: 1.4rem;
-      border-top: 1px solid rgba(201, 162, 76, 0.28);
-    }
-
-    .fitted-label {
-      font-family: var(--font-body);
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.26em;
-      text-transform: uppercase;
-      color: var(--mid);
-      white-space: nowrap;
-    }
-
-    .fitted-rotator {
-      display: inline-flex;
-      align-items: baseline;
-    }
-
-    .fitted-word {
-      font-family: var(--font-display);
-      font-style: italic;
-      font-size: 1.35rem;
-      font-weight: 500;
-      letter-spacing: 0.01em;
-      white-space: nowrap;
-      /* Metallic gold-foil fill + shimmer (readable on the light hero) */
-      background: var(--grad-foil-sheen-onlight);
-      background-size: 300% 100%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      color: var(--gold-dark);
-      animation: foil-sweep 9s linear infinite;
-    }
-
-    .fitted-caret {
-      display: inline-block;
-      width: 2px;
-      height: 1.05em;
-      margin-left: 2px;
-      background: var(--gold-dark);
-      transform: translateY(3px);
-      animation: fitted-blink 1s steps(1) infinite;
-    }
-
-    @keyframes fitted-blink {
-      0%, 50%   { opacity: 1; }
-      50.01%, 100% { opacity: 0; }
-    }
-
-    @media (max-width: 768px) {
-      .hero-fitted { max-width: none; justify-content: center; }
-    }
-
     /* ---- CATEGORIES SECTION ---- */
     .categories-section {
       padding: 6rem 0;
@@ -451,13 +387,6 @@
     .featured-section {
       padding: 6rem 0;
       background: var(--cream);
-    }
-
-    .featured-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      margin-top: 3rem;
     }
 
     /* ---- OUR STORY STRIP ---- */
@@ -627,7 +556,6 @@
       .hero-accent { left: 50%; transform: translateX(-50%); }
       .category-grid { grid-template-columns: repeat(2, 1fr); }
       .category-card:first-child { grid-row: auto; }
-      .featured-grid { grid-template-columns: repeat(2, 1fr); }
       .story-strip-inner { grid-template-columns: 1fr; }
       .story-strip-image { display: block; width: min(100%, 440px); margin: 0 auto; }
       .testimonials-grid { grid-template-columns: 1fr; }
@@ -639,7 +567,6 @@
       .hero-title { font-size: clamp(2.7rem, 12vw, 4rem); }
       .hero-carousel-card { padding: 0.65rem; }
       .category-grid { grid-template-columns: 1fr; }
-      .featured-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -722,15 +649,6 @@
       Premium menswear crafted for the man who commands every room.
       Suits, shirts, shoes and accessories — refined for the modern gentleman.
     </p>
-
-    <div class="hero-fitted reveal" style="transition-delay:0.3s;">
-      <span class="fitted-label">Get Custom Fitted</span>
-      <span class="fitted-rotator" id="fittedRotator"
-            data-words="Suits,Tuxedos,Shirts,Kaftans,African Attires"
-            aria-live="polite">
-        <span class="fitted-word">Suits</span><span class="fitted-caret" aria-hidden="true"></span>
-      </span>
-    </div>
 
     <div class="hero-actions reveal" style="transition-delay:0.4s;">
       <a href="pages/shop.html" class="btn btn-primary">
@@ -828,13 +746,35 @@
         <h2 class="section-title">New Arrivals</h2>
         <div class="gold-line"></div>
       </div>
-      <a href="pages/shop.html" class="btn btn-outline">
-        View All <i class="bi bi-arrow-right ms-1"></i>
-      </a>
+      <div class="featured-carousel-actions">
+        <div class="featured-carousel-controls" aria-label="New arrivals controls">
+          <span class="featured-carousel-count" id="featuredCarouselCount" aria-live="polite">01 / 01</span>
+          <button class="featured-carousel-button" id="featuredCarouselPrevious" type="button"
+                  aria-label="Previous new arrival">
+            <i class="bi bi-arrow-left" aria-hidden="true"></i>
+          </button>
+          <button class="featured-carousel-button" id="featuredCarouselNext" type="button"
+                  aria-label="Next new arrival">
+            <i class="bi bi-arrow-right" aria-hidden="true"></i>
+          </button>
+          <button class="featured-carousel-button featured-carousel-toggle" id="featuredCarouselToggle"
+                  type="button" aria-label="Pause new arrivals" aria-pressed="false" hidden>
+            <i class="bi bi-pause-fill" aria-hidden="true"></i>
+          </button>
+        </div>
+        <a href="pages/shop.html" class="btn btn-outline">
+          View All <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+      </div>
     </div>
 
-    <div class="featured-grid stagger-children mt-4" id="featuredGrid">
-      <!-- Populated dynamically from store.js -->
+    <div class="featured-carousel reveal" id="featuredCarousel">
+      <div class="featured-carousel-viewport" id="featuredCarouselViewport"
+           role="region" aria-label="New arrivals" aria-roledescription="carousel" tabindex="0">
+        <div class="featured-carousel-track" id="featuredGrid" aria-live="off">
+          <!-- Populated dynamically from store.js -->
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1043,16 +983,181 @@
 <!-- Main JS -->
 <script src="js/main.js"></script>
 <script>
+  let _featuredCarouselCleanup = null;
+
   async function renderFeaturedProducts() {
     const grid = document.getElementById('featuredGrid');
-    if (!grid) return;
-    const featured = (await FrankoAPI.getProducts()).filter(p => p.featured).slice(0, 3);
-    if (!featured.length) {
-      grid.innerHTML = '<p style="color:var(--mid);font-size:.85rem;grid-column:1/-1;text-align:center;padding:2rem;">No featured products yet. Mark products as featured in your Strapi admin.</p>';
+    const viewport = document.getElementById('featuredCarouselViewport');
+    const countLabel = document.getElementById('featuredCarouselCount');
+    const previous = document.getElementById('featuredCarouselPrevious');
+    const next = document.getElementById('featuredCarouselNext');
+    const toggle = document.getElementById('featuredCarouselToggle');
+    const carousel = document.getElementById('featuredCarousel');
+    if (!grid || !viewport || !countLabel || !previous || !next || !toggle || !carousel) return;
+
+    const products = (await FrankoAPI.getProducts())
+      .filter(product => product.image && product.image.trim());
+    const categories = ['suits', 'african_attires', 'shirts', 'shoes', 'accessories'];
+    const arrivals = categories
+      .map(category =>
+        products.find(product => product.category === category && product.featured) ||
+        products.find(product => product.category === category)
+      )
+      .filter(Boolean);
+    const selectedIds = new Set(arrivals.map(product => String(product.id)));
+    const additionalFeatured = products.filter(product => {
+      const id = String(product.id);
+      if (!product.featured || selectedIds.has(id)) return false;
+      selectedIds.add(id);
+      return true;
+    });
+    const picks = [
+      ...arrivals,
+      ...additionalFeatured,
+      ...products.filter(product => !selectedIds.has(String(product.id))),
+    ].slice(0, 6);
+
+    if (_featuredCarouselCleanup) _featuredCarouselCleanup();
+
+    if (!picks.length) {
+      grid.innerHTML = '<p class="featured-carousel-empty">No products are available right now.</p>';
+      countLabel.textContent = '00 / 00';
+      previous.hidden = true;
+      next.hidden = true;
+      toggle.hidden = true;
       return;
     }
-    grid.innerHTML = featured.map(p => buildProductCard(p, '')).join('');
+
+    grid.innerHTML = picks.map(product => buildProductCard(product, '')).join('');
     if (typeof initScrollReveal === 'function') initScrollReveal();
+
+    const cards = [...grid.querySelectorAll('.product-card')];
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let activeIndex = 0;
+    let timer = null;
+    let disposed = false;
+    let paused = false;
+    previous.hidden = cards.length < 2;
+    next.hidden = cards.length < 2;
+    toggle.hidden = cards.length < 2 || reduceMotion.matches;
+
+    function getLastIndex() {
+      if (cards.length < 2) return 0;
+      const gap = parseFloat(getComputedStyle(grid).columnGap) || 0;
+      const step = cards[1].offsetLeft - cards[0].offsetLeft || cards[0].getBoundingClientRect().width + gap;
+      const visibleCount = Math.max(1, Math.round((viewport.clientWidth + gap) / step));
+      return Math.max(0, cards.length - visibleCount);
+    }
+
+    function updateCount() {
+      const lastIndex = getLastIndex();
+      countLabel.textContent =
+        `${String(Math.min(activeIndex + 1, lastIndex + 1)).padStart(2, '0')} / ${String(lastIndex + 1).padStart(2, '0')}`;
+    }
+
+    function goTo(index) {
+      const lastIndex = getLastIndex();
+      activeIndex = Math.max(0, Math.min(index, lastIndex));
+      viewport.scrollTo({
+        left: cards[activeIndex].offsetLeft - grid.offsetLeft,
+        behavior: reduceMotion.matches ? 'auto' : 'smooth',
+      });
+      updateCount();
+    }
+
+    function getCurrentIndex() {
+      const scrollPosition = viewport.scrollLeft + grid.offsetLeft;
+      return cards.reduce((closest, card, index) =>
+        Math.abs(card.offsetLeft - scrollPosition) < Math.abs(cards[closest].offsetLeft - scrollPosition)
+          ? index
+          : closest, 0);
+    }
+
+    function start() {
+      stop();
+      if (disposed || paused || reduceMotion.matches || cards.length < 2 || document.hidden ||
+          carousel.matches(':hover') || carousel.contains(document.activeElement)) return;
+      timer = setInterval(() => {
+        const lastIndex = getLastIndex();
+        const currentIndex = Math.min(getCurrentIndex(), lastIndex);
+        goTo(currentIndex >= lastIndex ? 0 : currentIndex + 1);
+      }, 3800);
+    }
+
+    function stop() {
+      if (timer) clearInterval(timer);
+      timer = null;
+    }
+
+    function onScroll() {
+      activeIndex = Math.min(getCurrentIndex(), getLastIndex());
+      updateCount();
+    }
+
+    function onResize() {
+      goTo(Math.min(getCurrentIndex(), getLastIndex()));
+    }
+
+    function onPrevious() {
+      const lastIndex = getLastIndex();
+      const currentIndex = Math.min(getCurrentIndex(), lastIndex);
+      goTo(currentIndex <= 0 ? lastIndex : currentIndex - 1);
+      start();
+    }
+
+    function onNext() {
+      const lastIndex = getLastIndex();
+      const currentIndex = Math.min(getCurrentIndex(), lastIndex);
+      goTo(currentIndex >= lastIndex ? 0 : currentIndex + 1);
+      start();
+    }
+
+    function onToggle() {
+      paused = !paused;
+      toggle.setAttribute('aria-pressed', String(paused));
+      toggle.setAttribute('aria-label', paused ? 'Play new arrivals' : 'Pause new arrivals');
+      toggle.innerHTML = `<i class="bi ${paused ? 'bi-play-fill' : 'bi-pause-fill'}" aria-hidden="true"></i>`;
+      if (paused) stop();
+      else start();
+    }
+
+    const onFocusOut = () => setTimeout(start, 0);
+    const onMotionChange = () => {
+      toggle.hidden = cards.length < 2 || reduceMotion.matches;
+      start();
+    };
+
+    viewport.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onResize);
+    carousel.addEventListener('mouseenter', stop);
+    carousel.addEventListener('mouseleave', start);
+    carousel.addEventListener('focusin', stop);
+    carousel.addEventListener('focusout', onFocusOut);
+    previous.addEventListener('click', onPrevious);
+    next.addEventListener('click', onNext);
+    toggle.addEventListener('click', onToggle);
+    document.addEventListener('visibilitychange', start);
+    reduceMotion.addEventListener('change', onMotionChange);
+
+    _featuredCarouselCleanup = () => {
+      disposed = true;
+      stop();
+      viewport.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onResize);
+      carousel.removeEventListener('mouseenter', stop);
+      carousel.removeEventListener('mouseleave', start);
+      carousel.removeEventListener('focusin', stop);
+      carousel.removeEventListener('focusout', onFocusOut);
+      previous.removeEventListener('click', onPrevious);
+      next.removeEventListener('click', onNext);
+      toggle.removeEventListener('click', onToggle);
+      document.removeEventListener('visibilitychange', start);
+      reduceMotion.removeEventListener('change', onMotionChange);
+      _featuredCarouselCleanup = null;
+    };
+
+    goTo(0);
+    start();
   }
 
   /* ---- Hero product carousel (4 published products) ---- */
