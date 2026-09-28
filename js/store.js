@@ -223,10 +223,13 @@ function buildProductCard(product, prefix) {
     ${videoBtn}
     <div class="product-actions-overlay">
       <button class="btn btn-primary" onclick="addToCart('${nameEsc}', ${product.price}, '${catLabel}', '')">
-        <i class="bi bi-bag-plus"></i> Add to Cart
+        <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/>
+        </svg>
+        <span class="product-action-label product-action-cart-label">Add to Cart</span>
       </button>
       <button class="btn btn-white" onclick="buyNow('${nameEsc}', ${product.price})">
-        <i class="bi bi-whatsapp"></i> Buy Now
+        <span class="product-action-label">Buy</span>
       </button>
     </div>
   </div>

@@ -9,7 +9,8 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
-  <link rel="preload" href="../fonts/bodoni-moda-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../fonts/playfair-display-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../fonts/playfair-display-italic-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="../fonts/jost-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="../css/style.css" />
 
@@ -124,7 +125,9 @@
     }
 
     @media (max-width: 480px) {
-      .products-grid { grid-template-columns: 1fr; }
+      .products-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.8rem; }
+      .products-grid .product-info { padding: 0.75rem 0.75rem 1rem; }
+      .products-grid .product-name { font-size: 0.98rem; }
     }
   </style>
 </head>
@@ -142,7 +145,9 @@
   </div>
   <div class="d-flex align-items-center gap-3">
     <div class="nav-cart" onclick="openCart()" title="View Cart">
-      <i class="bi bi-bag"></i>
+      <svg class="google-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/>
+      </svg>
       <span class="cart-badge" style="display:none;">0</span>
     </div>
     <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
@@ -218,7 +223,8 @@
           <div class="product-badge">New</div>
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('The Executive Suit', 480, 'Suits', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('The Executive Suit', 480)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -237,7 +243,8 @@
           <img src="../images/suits/grey-and-black-suit.jpg" alt="Suit 002" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('The Boardroom Two-Piece', 560, 'Suits', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('The Boardroom Two-Piece', 560)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -257,7 +264,8 @@
           <div class="product-badge">Bestseller</div>
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Three-Piece Signature Suit', 720, 'Suits', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Three-Piece Signature Suit', 720)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -276,7 +284,8 @@
           <img src="../images/suits/charcoal-suit.jfif" alt="Suit 004" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Classic Charcoal Suit', 390, 'Suits', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Classic Charcoal Suit', 390)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -297,7 +306,8 @@
           <div class="product-badge">New</div>
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Oxford Dress Shirt', 95, 'Shirts', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Oxford Dress Shirt', 95)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -316,7 +326,8 @@
           <img src="../images/shirts/french-linen-shirts.jfif" alt="Shirt 002" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Slim Fit Linen Shirt', 110, 'Shirts', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Slim Fit Linen Shirt', 110)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -336,7 +347,8 @@
           <div class="product-badge">Bestseller</div>
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('French Cuff Formal Shirt', 85, 'Shirts', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('French Cuff Formal Shirt', 85)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -355,7 +367,8 @@
           <img src="../images/shirts/Chemise-à-manches-longues-en-pur.jfif" alt="Shirt 004" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Classic White Poplin', 75, 'Shirts', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Classic White Poplin', 75)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -376,7 +389,8 @@
           <div class="product-badge">Bestseller</div>
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Oxford Leather Derby', 220, 'Shoes', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Oxford Leather Derby', 220)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -395,7 +409,8 @@
           <img src="../images/shoes/mens-brown-double-monk-strap-leather-dress-shoes.jfif" alt="Shoes 002" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Monk Strap Loafer', 185, 'Shoes', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Monk Strap Loafer', 185)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -415,7 +430,8 @@
           <div class="product-badge">New</div>
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Brogue Cap Toe', 260, 'Shoes', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Brogue Cap Toe', 260)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -434,7 +450,8 @@
           <img src="../images/shoes/chelsea-boots-black-classic.jfif" alt="Shoes 004" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Chelsea Boot Classic', 195, 'Shoes', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Chelsea Boot Classic', 195)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -454,7 +471,8 @@
           <img src="../images/accessories/women&men-clothing-piece-for-suit-breast-pockets.jfif" alt="Acc 001" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Silk Pocket Square', 55, 'Accessories', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Silk Pocket Square', 55)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -474,7 +492,8 @@
           <div class="product-badge">New</div>
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('wooden cane collection', 75, 'Accessories', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('wooden cane collection', 75)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -494,7 +513,8 @@
           <div class="product-badge">Bestseller</div>
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('KEMISANT Men Belt 2Pack', 120, 'Accessories', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('KEMISANT Men Belt 2Pack', 120)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -513,7 +533,8 @@
           <img src="../images/accessories/download (7).jfif" alt="Acc 004" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Premium Brown Gold Tip Cane', 90, 'Accessories', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Premium Brown Gold Tip Cane', 90)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -534,7 +555,8 @@
           <div class="product-badge badge-special">Signature</div>
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Custom brown  embroidered Nigerian AGBADA for men', 180, 'Agbada', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Custom brown  embroidered Nigerian AGBADA for men', 180)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -554,7 +576,8 @@
           <div class="product-badge badge-special">Signature</div>
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Custom deep blue Agbada', 240, 'Agbada', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Gold-Tipped Royal Cane', 240)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -574,7 +597,8 @@
           <div class="product-badge badge-special">Handcrafted</div>
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Custom White Agbada', 320, 'Agbada', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Custom White Agbada', 320)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -593,7 +617,8 @@
           <img src="../images/brown-custom-agbada.jfif" alt="Brown custom Agbada" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Brown custom Agbada', 160, 'Agbada', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Brown custom Agbada', 160)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -615,7 +640,8 @@
           <div class="product-badge badge-special">Handcrafted</div>
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('custom-gold-embroidered-kaftan', 200, 'Agbada', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('custom-gold-embroidered-kaftan', 200)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -635,7 +661,8 @@
           <div class="product-badge badge-special">Handcrafted</div>
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Custom African Print Attire', 200, 'Agbada', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Custom African Print Attire', 200)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -655,7 +682,8 @@
           <div class="product-badge badge-special">Handcrafted</div>
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Custom African Black Agbada', 200, 'Agbada', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Custom African Black Agbada', 200)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -675,7 +703,8 @@
           <div class="product-badge badge-special">Handcrafted</div>
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('white-laced-design-agbada', 200, 'Agbada', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('white-laced-design-agbada', 200)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -694,7 +723,8 @@
           <img src="../images/shirts/custom-african-breatheable-print-shirt-brown.jpeg" alt="custom-african-breatheable-print-shirt-brown" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('custom-african-breatheable-print-shirt-brown', 70, 'shirt', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('custom-african-breatheable-print-shirt-brown', 70)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -713,7 +743,8 @@
           <img src="../images/shirts/oxford-shirts.jfif" alt="Oxford Shirts" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('oxford-shirts', 120, 'shirts', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('oxford-shirts', 120)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -732,7 +763,8 @@
           <img src="../images/shirts/custom-african-breatheable-print-shirt.jpeg" alt="Custom African Breatheable Print Shirt" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('custom-african-breatheable-print-shirt', 70, 'shirts', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('custom-african-breatheable-print-shirt', 70)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -751,7 +783,8 @@
           <img src="../images/shirts/shirt.jfif" alt="Soft Breatheable Cotton Shirt" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('soft breatheable cotton shirt', 120, 'shirts', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('soft breatheable cotton shirt', 120)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -770,7 +803,8 @@
           <img src="../images/shirts/classic-beaded-shirt-white.jpg" alt="Classic Beaded Shirt" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Classic Beaded Shirt white', 120, 'shirts', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Classic Beaded Shirt white', 120)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -789,7 +823,8 @@
           <img src="../images/shirts/classic-beaded-shirt-black.jpg" alt="Classic Beaded Shirt black" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Classic Beaded Shirt black', 120, 'shirts', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Classic Beaded Shirt black', 120)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -808,7 +843,8 @@
           <img src="../images/shirts/classic-gold-beaded-shirt.jpg" alt="Classic Gold Beaded Shirt" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Classic Gold Beaded Shirt', 120, 'shirts', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Classic Gold Beaded Shirt', 120)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -827,7 +863,8 @@
           <img src="../images/suits/white-suit.jpg" alt="White Suit" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('White Suit', 220, 'suits', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('White Suit', 220)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -846,7 +883,8 @@
           <img src="../images/couple-outfit-suit-and-dress-white&gold.jpeg" alt="Couple outfit - white Suit and Dress" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Couple outfit - White Suit and Dress', 350, 'suits', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Couple outfit - White Suit and Dress', 350)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -865,7 +903,8 @@
           <img src="../images/couple-outfit-suit-and-dress-blue.jpeg" alt="Blue Suit and Dress" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Couple outfit - Deep Blue Suit and Dress', 350, 'suits', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Couple outfit - Deep Blue Suit and Dress', 350)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -884,7 +923,8 @@
           <img src="../images/couple-outfit-suit-and-dress-burgundy.jpeg" alt="Burgundy Suit and Dress" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Couple outfit - Burgundy Suit and Dress', 350, 'suits', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Couple outfit - Burgundy Suit and Dress', 350)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -903,7 +943,8 @@
           <img src="../images/couple-outfit-suit-and-dress.jpeg" alt="Red Suit and Dress" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="product-actions-overlay">
             <button class="btn btn-primary" onclick="addToCart('Couple outfit - Red Suit and Dress', 350, 'suits', '')">
-              <i class="bi bi-bag-plus"></i> Add to Cart
+              <svg class="google-cart-icon product-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/></svg>
+              <span class="product-action-label product-action-cart-label">Add to Cart</span>
             </button>
             <button class="btn btn-white" onclick="buyNow('Couple outfit - Red Suit and Dress', 350)">
               <i class="bi bi-whatsapp"></i> Buy
@@ -926,7 +967,7 @@
   <div class="container">
     <div class="footer-grid">
       <div class="reveal">
-        <div class="footer-brand-name"><a href="index.html" class="navbar-brand"><img src="../images/logo.png" alt="FRANKO_CLOTHING"      class="nav-logo" style="height: 80px; width: auto;"></a>
+        <div class="footer-brand-name"><a href="../index.html" class="navbar-brand"><img src="../images/logo.png" alt="FRANKO_CLOTHING"      class="nav-logo" style="height: 80px; width: auto;"></a>
         </div>
         <p class="footer-tagline">Premium menswear for the modern gentleman. Based in the DMV. Shipped with intention, worn with distinction.</p>
         <div class="social-links">

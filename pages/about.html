@@ -9,7 +9,8 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
-  <link rel="preload" href="../fonts/bodoni-moda-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../fonts/playfair-display-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../fonts/playfair-display-italic-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="../fonts/jost-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="../css/style.css" />
 
@@ -355,7 +356,9 @@
   </div>
   <div class="d-flex align-items-center gap-3">
     <div class="nav-cart" onclick="openCart()" title="View Cart">
-      <i class="bi bi-bag"></i>
+      <svg class="google-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/>
+      </svg>
       <span class="cart-badge" style="display:none;">0</span>
     </div>
     <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
@@ -575,7 +578,7 @@
   <div class="container">
     <div class="footer-grid">
       <div class="reveal">
-       <div class="footer-brand-name"><a href="index.html" class="navbar-brand"><img src="../images/logo.png" alt="FRANKO CLOTHING"      class="nav-logo" style="height: 80px; width: auto;"></a>
+       <div class="footer-brand-name"><a href="../index.html" class="navbar-brand"><img src="../images/logo.png" alt="FRANKO CLOTHING"      class="nav-logo" style="height: 80px; width: auto;"></a>
         </div>
         <p class="footer-tagline">Premium menswear for the modern gentleman. Based in the DMV. Shipped with intention, worn with distinction.</p>
         <div class="social-links">

@@ -102,6 +102,11 @@ Copy any product card block in `shop.html` and update:
 | about.html | Hero, Intro, Values, Founder Story, Milestones + Footer             |
 | contact.html | Header, Contact Form + Info, WhatsApp CTA, Social Links + Footer  |
 
+## Typography
+
+The site uses self-hosted Playfair Display for headings and Jost for body copy. The
+Playfair Display WOFF2 files and their SIL Open Font License are in `fonts/`.
+
 ## Features Included
 
 - Cart sidebar with localStorage persistence
@@ -113,5 +118,7 @@ Copy any product card block in `shop.html` and update:
 - Sort by price / name on Shop page
 - Scroll reveal animations on all sections
 - Responsive mobile navigation
+- Four-image, category-balanced homepage carousel with pause controls
+- Touch-friendly product actions and a two-column phone shop grid
 - Marquee text strip on homepage
 - Social media placeholder links (update hrefs)

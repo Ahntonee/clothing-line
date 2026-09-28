@@ -11,8 +11,9 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
-  <!-- Preload primary fonts to avoid a flash of fallback text -->
-  <link rel="preload" href="fonts/bodoni-moda-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <!-- Preload the self-hosted display and body fonts used above the fold. -->
+  <link rel="preload" href="fonts/playfair-display-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/playfair-display-italic-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/jost-latin.woff2" as="font" type="font/woff2" crossorigin />
   <!-- Custom Styles -->
   <link rel="stylesheet" href="css/style.css" />
@@ -21,6 +22,7 @@
     /* ---- HERO SECTION ---- */
     .hero {
       min-height: 100vh;
+      min-height: 100svh;
       background:
         radial-gradient(80% 60% at 78% 12%, rgba(201,162,76,0.12) 0%, rgba(201,162,76,0) 60%),
         linear-gradient(180deg, #fdfbf6 0%, var(--off-white) 100%);
@@ -105,8 +107,49 @@
       padding: 3.5rem 3.25rem 3.5rem 1.25rem;
     }
 
-    /* ---- Hero product carousel ---- */
-    .hero-carousel-wrap { width: 100%; max-width: 430px; }
+    /* ---- Curated product carousel card ---- */
+    .hero-carousel-card {
+      width: 100%;
+      padding: 0.9rem;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(201, 162, 76, 0.28);
+      box-shadow: 0 28px 70px rgba(20, 16, 11, 0.16);
+    }
+
+    .hero-carousel-heading,
+    .hero-carousel-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .hero-carousel-heading {
+      padding: 0.15rem 0.15rem 0.85rem;
+    }
+
+    .hero-carousel-label,
+    .hero-carousel-count {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    .hero-carousel-label {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .hero-carousel-label::before {
+      content: '';
+      width: 22px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .hero-carousel-wrap { width: 100%; max-width: 470px; }
 
     .hero-carousel {
       position: relative;
@@ -126,8 +169,12 @@
       transition: opacity 0.9s ease;
       text-decoration: none;
       color: #fff;
+      pointer-events: none;
     }
-    .hero-slide.is-active { opacity: 1; }
+    .hero-slide.is-active {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
     .hero-slide img {
       width: 100%;
@@ -162,11 +209,17 @@
       white-space: nowrap;
     }
 
+    .hero-carousel-controls {
+      gap: 0.8rem;
+      padding: 0.85rem 0.15rem 0.1rem;
+    }
+
     .hero-carousel-dots {
       display: flex;
       gap: 0.4rem;
-      justify-content: center;
+      align-items: center;
     }
+
     .hero-dot {
       width: 7px; height: 7px;
       padding: 0;
@@ -176,10 +229,39 @@
       cursor: pointer;
       transition: width 0.3s ease, background 0.3s ease, border-radius 0.3s ease;
     }
+
     .hero-dot.is-active {
       width: 20px;
       border-radius: 4px;
       background: var(--gold-dark);
+    }
+
+    .hero-carousel-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      color: var(--dark);
+      background: transparent;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .hero-carousel-toggle[hidden] { display: none; }
+
+    .hero-carousel-toggle:hover,
+    .hero-carousel-toggle:focus-visible {
+      color: var(--gold-deep);
+      border-color: var(--gold);
+    }
+
+    .hero-carousel-toggle:focus-visible,
+    .hero-dot:focus-visible {
+      outline: 2px solid var(--gold-dark);
+      outline-offset: 3px;
     }
 
     /* Decorative geometric accent */
@@ -520,18 +602,25 @@
       margin-bottom: 0.8rem;
     }
 
-    /* Responsive Hero */
+    /* Keep the product card in the first view on tablets and phones. */
     @media (max-width: 992px) {
       .hero {
         grid-template-columns: 1fr;
+        min-height: 0;
+        padding-bottom: 1rem;
       }
+
       .hero-image-col {
-        display: none;
+        padding: 2rem 2rem 0;
       }
+
+      .hero-carousel-wrap { max-width: 440px; }
+
       .hero-content {
-        padding: 4rem 2rem;
+        padding: 2.5rem 2rem 4rem;
         text-align: center;
       }
+
       .hero-eyebrow { justify-content: center; }
       .hero-desc { margin: 0 auto 2rem; }
       .hero-actions { justify-content: center; }
@@ -540,11 +629,15 @@
       .category-card:first-child { grid-row: auto; }
       .featured-grid { grid-template-columns: repeat(2, 1fr); }
       .story-strip-inner { grid-template-columns: 1fr; }
-      .story-strip-image { display: none; }
+      .story-strip-image { display: block; width: min(100%, 440px); margin: 0 auto; }
       .testimonials-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 576px) {
+      .hero-image-col { padding: 1.5rem 1.2rem 0; }
+      .hero-content { padding: 2rem 1.2rem 3rem; }
+      .hero-title { font-size: clamp(2.7rem, 12vw, 4rem); }
+      .hero-carousel-card { padding: 0.65rem; }
       .category-grid { grid-template-columns: 1fr; }
       .featured-grid { grid-template-columns: 1fr; }
     }
@@ -567,7 +660,9 @@
   <div class="d-flex align-items-center gap-3">
     <!-- Cart trigger -->
     <div class="nav-cart" onclick="openCart()" title="View Cart">
-      <i class="bi bi-bag"></i>
+      <svg class="google-cart-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14l.93-2h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01A1 1 0 0 0 20.29 2H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.45C4.52 14.37 5.48 16 7 16h12v-2H7.17z"/>
+      </svg>
       <span class="cart-badge" style="display:none;">0</span>
     </div>
     <!-- Hamburger for mobile -->
@@ -588,7 +683,32 @@
 
 <!-- ===================== SECTION 1: HERO ===================== -->
 <section class="hero">
-  <!-- Left: Content -->
+  <!-- The four live product slides share one fixed crop and frame. -->
+  <div class="hero-image-col">
+    <div class="hero-carousel-wrap" id="heroCarouselWrap">
+      <div class="hero-carousel-card">
+        <div class="hero-carousel-heading">
+          <span class="hero-carousel-label">The collection</span>
+          <span class="hero-carousel-count" id="heroCarouselCount">Featured selection</span>
+        </div>
+        <div class="hero-carousel" id="heroCarousel" aria-label="Featured products">
+          <a class="hero-slide is-active" href="pages/shop.html">
+            <img src="images/hero/hero-main.jpg" alt="Explore the FRANKO Clothing collection" loading="eager"
+                 style="object-position:bottom;">
+          </a>
+        </div>
+        <div class="hero-carousel-controls">
+          <div class="hero-carousel-dots" id="heroCarouselDots" role="group" aria-label="Choose a featured product"></div>
+          <button class="hero-carousel-toggle" id="heroCarouselToggle" type="button" hidden
+                  aria-label="Pause slideshow" aria-pressed="false">
+            <i class="bi bi-pause-fill" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Keep the existing hero copy and calls to action. -->
   <div class="hero-content">
     <div class="hero-eyebrow reveal">THE ARENA OF FASHION</div>
 
@@ -640,18 +760,6 @@
     </div> -->
   </div>
 
-  <!-- Right: Product carousel (falls back to a single image until products load) -->
-  <div class="hero-image-col">
-    <div class="hero-carousel-wrap" id="heroCarouselWrap">
-      <div class="hero-carousel" id="heroCarousel">
-        <div class="hero-slide is-active">
-          <img src="images/hero/hero-main.jpg" alt="FRANKO Clothing" loading="eager"
-               style="object-position:bottom;">
-        </div>
-      </div>
-      <div class="hero-carousel-dots" id="heroCarouselDots" role="tablist" aria-label="Featured products"></div>
-    </div>
-  </div>
 </section>
 
 <!-- ===================== SECTION 2: CATEGORIES ===================== -->
@@ -882,8 +990,6 @@
           <a href="pages/about.html">Our Story</a>
           <a href="pages/blog.html">Blog</a>
           <a href="pages/contact.html">Contact Us</a>
-          <a href="#">Lookbook</a>
-          <a href="#">Size Guide</a>
         </div>
       </div>
 
@@ -950,58 +1056,129 @@
   }
 
   /* ---- Hero product carousel (4 published products) ---- */
-  let _heroCarTimer = null;
+  let _heroCarouselCleanup = null;
 
   async function renderHeroCarousel() {
     const track = document.getElementById('heroCarousel');
     const dotsWrap = document.getElementById('heroCarouselDots');
-    if (!track || !dotsWrap) return;
+    const countLabel = document.getElementById('heroCarouselCount');
+    const toggle = document.getElementById('heroCarouselToggle');
+    const wrap = document.getElementById('heroCarouselWrap');
+    if (!track || !dotsWrap || !countLabel || !toggle || !wrap) return;
 
     const all = await FrankoAPI.getProducts();
-    if (!all.length) return;                 /* keep the fallback image */
+    const withImages = all.filter(product => product.image && product.image.trim());
+    if (!withImages.length) return;
 
-    const featured = all.filter(p => p.featured);
-    const pool = featured.length >= 4 ? featured : [...featured, ...all.filter(p => !p.featured)];
-    const picks = pool.slice(0, 4);
-    if (!picks.length) return;
+    const categories = ['suits', 'african_attires', 'shirts', 'shoes'];
+    const categoryPicks = categories
+      .map(category =>
+        withImages.find(product => product.category === category && product.featured) ||
+        withImages.find(product => product.category === category)
+      )
+      .filter(Boolean);
+    const selectedIds = new Set(categoryPicks.map(product => String(product.id)));
+    const picks = [
+      ...categoryPicks,
+      ...withImages.filter(product => !selectedIds.has(String(product.id))),
+    ].slice(0, 4);
+    if (picks.length < 4) return;             /* keep the fallback until four published images exist */
+
+    if (_heroCarouselCleanup) _heroCarouselCleanup();
 
     const srcFor = p => /^https?:\/\//i.test(p.image) ? p.image : (window.IMG_PREFIX || '') + p.image;
+    const escapeHTML = value => String(value).replace(/[&<>"']/g, character => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[character]);
 
     track.innerHTML = picks.map((p, i) => `
-      <a class="hero-slide${i === 0 ? ' is-active' : ''}"
+      <a class="hero-slide${i === 0 ? ' is-active' : ''}" id="heroProduct${i + 1}"
+         aria-hidden="${i !== 0}" tabindex="${i === 0 ? '0' : '-1'}"
          href="pages/shop.html?cat=${encodeURIComponent(p.category || '')}">
-        <img src="${srcFor(p)}" alt="${p.name.replace(/"/g, '&quot;')}" loading="${i === 0 ? 'eager' : 'lazy'}">
+        <img src="${escapeHTML(srcFor(p))}" alt="${escapeHTML(p.name)}" loading="eager"
+             fetchpriority="${i === 0 ? 'high' : 'low'}">
         <span class="hero-slide-caption">
-          <span class="hero-slide-name">${p.name}</span>
+          <span class="hero-slide-name">${escapeHTML(p.name)}</span>
           <span class="hero-slide-price">$${Number(p.price).toLocaleString()}</span>
         </span>
       </a>`).join('');
 
-    dotsWrap.innerHTML = picks.map((_, i) =>
-      `<button class="hero-dot${i === 0 ? ' is-active' : ''}" type="button" aria-label="Show product ${i + 1}"></button>`
+    dotsWrap.innerHTML = picks.map((product, i) =>
+      `<button class="hero-dot${i === 0 ? ' is-active' : ''}" type="button"
+        aria-label="Show ${escapeHTML(product.name)}" aria-controls="heroProduct${i + 1}"
+        aria-current="${i === 0}"></button>`
     ).join('');
 
     const slides = [...track.querySelectorAll('.hero-slide')];
     const dots = [...dotsWrap.querySelectorAll('.hero-dot')];
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let idx = 0;
+    let paused = false;
+    let disposed = false;
+    let timer = null;
+    toggle.hidden = reduce;
 
     function go(n) {
       idx = (n + slides.length) % slides.length;
-      slides.forEach((s, i) => s.classList.toggle('is-active', i === idx));
-      dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+      slides.forEach((slide, i) => {
+        const active = i === idx;
+        slide.classList.toggle('is-active', active);
+        slide.setAttribute('aria-hidden', String(!active));
+        slide.tabIndex = active ? 0 : -1;
+      });
+      dots.forEach((dot, i) => {
+        const active = i === idx;
+        dot.classList.toggle('is-active', active);
+        dot.setAttribute('aria-current', String(active));
+      });
+      countLabel.textContent = `${String(idx + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
     }
+
     function start() {
       stop();
-      if (reduce || slides.length < 2) return;
-      _heroCarTimer = setInterval(() => go(idx + 1), 4500);
+      if (disposed || reduce || paused || slides.length < 2 || document.hidden ||
+          wrap.matches(':hover') || wrap.contains(document.activeElement)) return;
+      timer = setInterval(() => go(idx + 1), 4500);
     }
-    function stop() { if (_heroCarTimer) clearInterval(_heroCarTimer); _heroCarTimer = null; }
 
-    dots.forEach((d, i) => d.addEventListener('click', () => { go(i); start(); }));
-    const wrap = document.getElementById('heroCarouselWrap');
+    function stop() {
+      if (timer) clearInterval(timer);
+      timer = null;
+    }
+
+    const dotHandlers = dots.map((dot, i) => {
+      const handler = () => { go(i); start(); };
+      dot.addEventListener('click', handler);
+      return handler;
+    });
+    const onFocusOut = () => setTimeout(start, 0);
+    const onToggle = () => {
+      paused = !paused;
+      toggle.setAttribute('aria-pressed', String(paused));
+      toggle.setAttribute('aria-label', paused ? 'Play slideshow' : 'Pause slideshow');
+      toggle.innerHTML = `<i class="bi ${paused ? 'bi-play-fill' : 'bi-pause-fill'}" aria-hidden="true"></i>`;
+      if (paused) stop();
+      else start();
+    };
     wrap.addEventListener('mouseenter', stop);
     wrap.addEventListener('mouseleave', start);
+    wrap.addEventListener('focusin', stop);
+    wrap.addEventListener('focusout', onFocusOut);
+    toggle.addEventListener('click', onToggle);
+    document.addEventListener('visibilitychange', start);
+    _heroCarouselCleanup = () => {
+      disposed = true;
+      stop();
+      wrap.removeEventListener('mouseenter', stop);
+      wrap.removeEventListener('mouseleave', start);
+      wrap.removeEventListener('focusin', stop);
+      wrap.removeEventListener('focusout', onFocusOut);
+      toggle.removeEventListener('click', onToggle);
+      document.removeEventListener('visibilitychange', start);
+      dots.forEach((dot, i) => dot.removeEventListener('click', dotHandlers[i]));
+      _heroCarouselCleanup = null;
+    };
+    go(0);
     start();
   }
 
